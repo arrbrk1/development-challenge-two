@@ -1,0 +1,52 @@
+service: patient
+
+frameworkVersion: ">=3.25.1"
+
+package:
+  individually: true
+
+plugins:
+  - serverless-plugin-common-excludes
+  - serverless-plugin-include-dependencies
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  stage: prod
+  region: us-east-1
+
+functions:
+  patientsHandling:
+    handler: index.handler
+    memorySize: 128
+    description: Handles patients information.
+    events:
+      - http:
+          path: patients
+          method: get
+          cors: true
+      - http:
+          path: patient
+          method: post
+          cors: true
+      - http:
+          path: patient/{id}
+          method: get
+          cors: true
+      - http:
+          path: patient/{id}
+          method: put
+          cors: true
+      - http:
+          path: patient/{id}
+          method: delete
+          cors: true
+  clearDb:
+    handler: index.clearDb
+    memorySize: 128
+    description: Clears the database.
+    events:
+      - http:
+          path: patient
+          method: get
+          cors: true
